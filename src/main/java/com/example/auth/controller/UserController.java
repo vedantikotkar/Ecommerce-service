@@ -141,9 +141,9 @@ public class UserController {
         return ResponseEntity.ok("User logged out and all sessions removed.");
     }
 
-        @PutMapping("/verify-email")
+        @PostMapping("/verify-email")
         public ResponseEntity<String> verifyEmail(@RequestParam String email) {
-            return authService.verifyEmail(email);
+        return authService.verifyEmail(email);
         }
     }
 

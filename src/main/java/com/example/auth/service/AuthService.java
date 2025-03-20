@@ -51,7 +51,7 @@ public class AuthService {
     private final String clientId = "springboot-keycloak";
     private final String clientSecret = "LYfLDQ6iMgR7edqmKtEgy2KNRJ37ac9O";
     private final String adminUsername = "admin";
-    private final String adminPassword = "admin";
+    private final String adminPassword = "admin123";
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
 
     @Autowired
@@ -419,35 +419,48 @@ public class AuthService {
         }
 
         // 🔹 Find User ID in Keycloak
-        String userId = getUserId(normalizedEmail, adminToken);
-        if (userId == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found in Keycloak.");
-        }
-
-        // 🔹 Mark Email as Verified in Keycloak
-        String keycloakUserUrl = keycloakUrl + "/admin/realms/" + realm + "/users/" + userId;
-        Map<String, Object> updatePayload = new HashMap<>();
-        updatePayload.put("emailVerified", true);
+        String keycloakUsersUrl = keycloakUrl + "/admin/realms/" + realm + "/users?email=" + normalizedEmail;
 
         try {
-            webClient.put()
-                    .uri(keycloakUserUrl)
+            String responseBody = webClient.get()
+                    .uri(keycloakUsersUrl)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminToken)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(updatePayload)
                     .retrieve()
-                    .toBodilessEntity()
+                    .bodyToMono(String.class)
                     .block();
 
-            // 🔹 Update Local Database
-            Optional<User> userOptional = userRepository.findByEmail(normalizedEmail);
-            if (userOptional.isPresent()) {
-                User user = userOptional.get();
-                user.setEmailVerified(true);
-                userRepository.save(user);
-                return ResponseEntity.ok("Email verified successfully in Keycloak and database.");
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode usersArray = objectMapper.readTree(responseBody);
+
+            if (usersArray.isArray() && usersArray.size() > 0) {
+                String userId = usersArray.get(0).get("id").asText();
+
+                // 🔹 Mark Email as Verified in Keycloak
+                String keycloakUserUrl = keycloakUrl + "/admin/realms/" + realm + "/users/" + userId;
+                Map<String, Object> updatePayload = new HashMap<>();
+                updatePayload.put("emailVerified", true);
+
+                webClient.put()
+                        .uri(keycloakUserUrl)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(updatePayload)
+                        .retrieve()
+                        .toBodilessEntity()
+                        .block();
+
+                // 🔹 Update Local Database
+                Optional<User> userOptional = userRepository.findByEmail(normalizedEmail);
+                if (userOptional.isPresent()) {
+                    User user = userOptional.get();
+                    user.setEmailVerified(true);
+                    userRepository.save(user);
+                    return ResponseEntity.ok("Email verified successfully in Keycloak and database.");
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found in local database.");
+                }
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found in local database.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found in Keycloak.");
             }
 
         } catch (WebClientResponseException e) {
@@ -456,6 +469,7 @@ public class AuthService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
         }
     }
+
 
     private String getUserIdByEmail(String email) {
         try {

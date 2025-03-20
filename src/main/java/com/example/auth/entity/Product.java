@@ -122,4 +122,10 @@ public class Product {
     @ElementCollection
     @Schema(description = "Tags associated with the product for searchability", example = "[\"sports\", \"shoes\", \"running\"]")
     private List<String> tags;
+
+
+    @ElementCollection
+    @Schema(description = "Available images for the product")
+    private List<String> images;
+
 }

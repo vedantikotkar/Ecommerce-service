@@ -81,6 +81,6 @@ public class User {
     @Embedded  // Embed the Address class
     private Address address;
 
-  private String profilePhotoPath;;
+  private String profilePhotoPath;
 
 }
