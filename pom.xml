@@ -61,6 +61,11 @@
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-crypto</artifactId>
 			</dependency>
+		<dependency>
+			<groupId>com.stripe</groupId>
+			<artifactId>stripe-java</artifactId>
+			<version>22.0.0</version>
+		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.keycloak/keycloak-spring-boot-starter -->
 		<dependency>

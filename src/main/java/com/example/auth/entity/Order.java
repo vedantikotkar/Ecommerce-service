@@ -102,4 +102,7 @@ public class  Order {
     @Schema(description = "status of product ", example = "Delivered")
     private String status;
 
+    private String currency;
+    private double amount;
+
 }

@@ -85,7 +85,6 @@
 //    }
 //}
 package com.example.auth.config;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -111,7 +110,7 @@ public class SecurityConfig {
             "/like/liked", "/like/", "/like/unlike", "/orders/{id}",
             "/like/unlike/**", "/like/**",
             "/reviewed-products/review", "/reviewed-products/",
-            "/rated-products/rate", "/rated-products/",
+            "/rated-products/rate", "/rated-products/","payment/create-order","payment/verify-payment",
             "/cart-products/add", "/cart-products/remove", "/cart-products/add"
     };
 
@@ -120,6 +119,15 @@ public class SecurityConfig {
             "auth/**" ,"/wishlist/remove/{wishlistId}","/cart-products/add" ,"like/unlike"
     };
 
+    private static final String[] SUPER_ADMIN_API_PATHS = {
+            "/admin/**", "/users/**", "/roles/**", "/permissions/**"
+    };
+
+    private static final String[] ADMIN_API_PATHS = {
+            "/admin/**", "/users/**", "/roles/**", "/permissions/**"
+    };
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -127,6 +135,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_API_PATHS).permitAll() // Public APIs
                         .requestMatchers(PUBLIC_DELETE_PATHS).permitAll() // Allow DELETE requests publicly
+                        .requestMatchers(ADMIN_API_PATHS).hasRole("ADMIN") // Admin access
+                        .requestMatchers(SUPER_ADMIN_API_PATHS).hasRole("SUPER_ADMIN") // Super Admin access
                         .anyRequest().authenticated() // Require authentication for other requests
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
