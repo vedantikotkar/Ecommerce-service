@@ -17,11 +17,14 @@ public class ReviewedProductController {
         this.reviewedProductService = reviewedProductService;
     }
 
-    // Review a product
     @PostMapping("/review")
-    public ResponseEntity<ReviewedProduct> reviewProduct(@RequestParam String userId, @RequestParam String productId) {
-        return ResponseEntity.ok(reviewedProductService.reviewProduct(userId, productId));
+    public ResponseEntity<ReviewedProduct> reviewProduct(
+            @RequestParam String userId,
+            @RequestParam String productId,
+            @RequestParam String review) {
+        return ResponseEntity.ok(reviewedProductService.reviewProduct(userId, productId, review));
     }
+
 
     // Get all reviewed products for a user
     @GetMapping("/{userId}")

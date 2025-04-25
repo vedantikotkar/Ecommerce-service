@@ -107,4 +107,26 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+
+//    @PutMapping("/{productId}/increase")
+//    public ResponseEntity<Product> increaseQuantity(@PathVariable String productId) {
+//        return ResponseEntity.ok(productService.increaseProductQuantity(productId));
+//    }
+//
+//    @PutMapping("/{productId}/decrease")
+//    public ResponseEntity<Product> decreaseQuantity(@PathVariable String productId) {
+//        return ResponseEntity.ok(productService.decreaseProductQuantity(productId, 1));
+//    }
+
+
+    @PutMapping("/{userId}/{productId}/increase")
+    public ResponseEntity<Product> increaseQuantity(@PathVariable String userId, @PathVariable String productId) {
+        return ResponseEntity.ok(productService.increaseProductQuantity(userId, productId));
+    }
+
+    @PutMapping("/{userId}/{productId}/decrease")
+    public ResponseEntity<Product> decreaseQuantity(@PathVariable String userId, @PathVariable String productId) {
+        return ResponseEntity.ok(productService.decreaseProductQuantity(userId, productId));
+    }
 }

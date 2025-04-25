@@ -15,11 +15,11 @@ public class RatedProductService {
         this.ratedProductRepository = ratedProductRepository;
     }
 
-    // Rate a product
-    public RatedProduct rateProduct(String userId, String productId) {
+    public RatedProduct rateProduct(String userId, String productId, int rating) {
         RatedProduct ratedProduct = new RatedProduct();
         ratedProduct.setUserId(userId);
         ratedProduct.setProductId(productId);
+        ratedProduct.setRating(rating);
         return ratedProductRepository.save(ratedProduct);
     }
 
@@ -30,7 +30,7 @@ public class RatedProductService {
 
     // Unrate a product
     public void unrateProduct(String userId, String productId) {
-        ratedProductRepository.deleteByUserIdAndProductId(userId, productId);
+        ratedProductRepository.softDeleteByUserIdAndProductId(userId, productId);
     }
 
     // Get all rated products

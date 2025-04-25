@@ -49,7 +49,14 @@
 				<version>22.0.1</version> <!-- Use the latest stable version -->
 			</dependency>
 
-			<!-- Jakarta WS-RS API (for Response class) -->
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- Jakarta WS-RS API (for Response class) -->
 			<dependency>
 				<groupId>jakarta.ws.rs</groupId>
 				<artifactId>jakarta.ws.rs-api</artifactId>

@@ -409,16 +409,14 @@ public class AuthService {
             return ResponseEntity.badRequest().body("Email cannot be empty.");
         }
 
-        // 🔹 Normalize Email
+
         String normalizedEmail = email.trim().toLowerCase();
 
-        // 🔹 Get Admin Token
         String adminToken = getAdminToken();
         if (adminToken == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Failed to get admin access token.");
         }
 
-        // 🔹 Find User ID in Keycloak
         String keycloakUsersUrl = keycloakUrl + "/admin/realms/" + realm + "/users?email=" + normalizedEmail;
 
         try {
@@ -435,7 +433,7 @@ public class AuthService {
             if (usersArray.isArray() && usersArray.size() > 0) {
                 String userId = usersArray.get(0).get("id").asText();
 
-                // 🔹 Mark Email as Verified in Keycloak
+
                 String keycloakUserUrl = keycloakUrl + "/admin/realms/" + realm + "/users/" + userId;
                 Map<String, Object> updatePayload = new HashMap<>();
                 updatePayload.put("emailVerified", true);
@@ -449,7 +447,6 @@ public class AuthService {
                         .toBodilessEntity()
                         .block();
 
-                // 🔹 Update Local Database
                 Optional<User> userOptional = userRepository.findByEmail(normalizedEmail);
                 if (userOptional.isPresent()) {
                     User user = userOptional.get();

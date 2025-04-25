@@ -8,22 +8,28 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "reviewed_products")
+@Table(name = "emails")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReviewedProduct {
+public class Emails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    private String productId;
-    private String userId;
-    private String review;
+    private String name;
+    private String email;
+    private String phone;
+    private String message;
+//    @ManyToOne
+//    @JoinColumn(name = "userId", nullable = true)
+//    private User user;
+
     @Column(name = "is_deleted")
     private boolean isDeleted = false;
 
+    // Auditing Fields
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -33,6 +39,5 @@ public class ReviewedProduct {
     private LocalDateTime updatedAt;
 
     private String createdBy;
-
     private String updatedBy;
 }

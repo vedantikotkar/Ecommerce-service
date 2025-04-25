@@ -57,12 +57,18 @@ public class OrderService {
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
 
-            if (!order.getStatus().equalsIgnoreCase("CANCELLED") && !order.getStatus().equalsIgnoreCase("COMPLETED")) {
-                order.setStatus("CANCELLED");
+            if (!order.getStatus().equalsIgnoreCase("Cancelled") && !order.getStatus().equalsIgnoreCase("Completed")) {
+                order.setStatus("Cancelled");
                 orderRepository.save(order);
                 return true;
             }
         }
         return false;
     }
+
+
+    public List<Order> getCancelledOrders() {
+        return orderRepository.findByStatus("Cancelled");
+    }
+
 }

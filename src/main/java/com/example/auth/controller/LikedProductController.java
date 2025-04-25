@@ -37,4 +37,11 @@ public class LikedProductController {
     public ResponseEntity<List<LikedProduct>> getAllLikedProducts() {
         return ResponseEntity.ok(likedProductService.getAllLikedProducts());
     }
+
+
+    @DeleteMapping("/remove/product/{productId}")
+    public ResponseEntity<String> removeFromWishlistByProductId(@PathVariable String productId) {
+        likedProductService.removeFromWishlistByProductId(productId);
+        return ResponseEntity.ok("Item removed from wishlist");
+    }
 }

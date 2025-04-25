@@ -48,6 +48,7 @@ public class ProductService {
             product.setQuantity(updatedProduct.getQuantity());
             product.setReturnAvailable(updatedProduct.isReturnAvailable());
             product.setFreeDelivery(updatedProduct.isFreeDelivery());
+            product.setDeliveryAvailability(updatedProduct.getDeliveryAvailability());
             product.setImageUrl(updatedProduct.getImageUrl());
             return productRepository.save(product);
         } else {
@@ -62,4 +63,57 @@ public class ProductService {
     public List<Product> bulkUploadProducts(List<Product> products) {
         return productRepository.saveAll(products);
     }
+
+
+//    public Product increaseProductQuantity(String productId) {
+//        Product product = productRepository.findById(productId)
+//                .orElseThrow(() -> new RuntimeException("Product not found"));
+//
+//        // Always increase by 1 (Hardcoded)
+//        product.setQuantity(product.getQuantity() + 1);
+//
+//        // Modify price logic as needed (Keeping it unchanged)
+//        product.setPrice(product.getPrice());
+//
+//        return productRepository.save(product);
+//    }
+//
+//
+//    public Product decreaseProductQuantity(String productId, int quantity) {
+//        Product product = productRepository.findById(productId)
+//                .orElseThrow(() -> new RuntimeException("Product not found"));
+//
+//        if (product.getQuantity() < quantity) {
+//            throw new RuntimeException("Not enough stock available");
+//        }
+//
+//        product.setQuantity(product.getQuantity() - quantity);
+//        product.setPrice(product.getPrice() - (quantity * product.getPrice()));
+//
+//        return productRepository.save(product);
+//    }
+
+
+
+    public Product increaseProductQuantity(String userId, String productId) {
+        Product product = productRepository.findByIdAndUserId(productId, userId)
+                .orElseThrow(() -> new RuntimeException("Product not found for this user"));
+
+        product.setQuantity(product.getQuantity() + 1);
+        return productRepository.save(product);
+    }
+
+
+    public Product decreaseProductQuantity(String userId, String productId) {
+        Product product = productRepository.findByIdAndUserId(productId, userId)
+                .orElseThrow(() -> new RuntimeException("Product not found for this user"));
+
+        if (product.getQuantity() <= 0) {
+            throw new RuntimeException("Not enough stock available");
+        }
+
+        product.setQuantity(product.getQuantity() - 1);
+        return productRepository.save(product);
+    }
+
 }

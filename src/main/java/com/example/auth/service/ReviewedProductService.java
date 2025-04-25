@@ -14,13 +14,14 @@ public class ReviewedProductService {
         this.reviewedProductRepository = reviewedProductRepository;
     }
 
-    // Review a product
-    public ReviewedProduct reviewProduct(String userId, String productId) {
-        ReviewedProduct reviewedProduct = new ReviewedProduct();
-        reviewedProduct.setUserId(userId);
-        reviewedProduct.setProductId(productId);
-        return reviewedProductRepository.save(reviewedProduct);
+    public ReviewedProduct reviewProduct(String userId, String productId, String review) {
+        ReviewedProduct reviews = new ReviewedProduct();
+        reviews.setUserId(userId);
+        reviews.setProductId(productId);
+        reviews.setReview(review);
+        return reviewedProductRepository.save(reviews);
     }
+
 
     // Get all reviewed products by a user
     public List<ReviewedProduct> getReviewedProducts(String userId) {
@@ -29,7 +30,7 @@ public class ReviewedProductService {
 
     // Unreview a product
     public void unreviewProduct(String userId, String productId) {
-        reviewedProductRepository.deleteByUserIdAndProductId(userId, productId);
+        reviewedProductRepository.softDeleteByUserIdAndProductId(userId, productId);
     }
 
     // Get all reviewed products

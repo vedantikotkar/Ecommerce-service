@@ -24,8 +24,9 @@ public class WishlistService {
         return wishlistRepository.save(wishlistItem);
     }
 
-    @Transactional
-    public void removeFromWishlist(String wishlistId) {
-        wishlistRepository.deleteById(wishlistId);
-    }
+//    @Transactional
+//    public void removeFromWishlistByProductId(String productId) {
+//        wishlistRepository.deleteByProductId(productId);
+//    }
+
 }

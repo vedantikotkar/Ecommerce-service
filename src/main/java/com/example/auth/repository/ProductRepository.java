@@ -7,11 +7,19 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product,String> {
-    List<Product> findByCategoryId(String categoryId);
-    List<Product> findByProductNameContainingIgnoreCase(String tags);
+public interface ProductRepository extends JpaRepository<Product, String> {
+
+    @Query("SELECT p FROM Product p WHERE p.category.id = :categoryId")
+    List<Product> findByCategoryId(@Param("categoryId") String categoryId);
+
+    @Query("SELECT p FROM Product p WHERE LOWER(p.productName) LIKE LOWER(CONCAT('%', :tag, '%'))")
+    List<Product> findByProductNameContainingIgnoreCase(@Param("tag") String tag);
+
+    @Query("SELECT p FROM Product p WHERE p.id = :productId AND p.user.id = :userId")
+    Optional<Product> findByIdAndUserId(@Param("productId") String productId, @Param("userId") String userId);
 
     @Query("SELECT p FROM Product p WHERE " +
             "LOWER(p.productName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
@@ -22,5 +30,4 @@ public interface ProductRepository extends JpaRepository<Product,String> {
             "LOWER(p.category.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "EXISTS (SELECT tag FROM p.tags tag WHERE LOWER(tag) LIKE LOWER(CONCAT('%', :keyword, '%')))")
     List<Product> searchProducts(@Param("keyword") String keyword);
-
 }

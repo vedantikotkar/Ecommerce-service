@@ -2,8 +2,12 @@ package com.example.auth.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -111,6 +115,12 @@ public class Product {
     @Schema(description = "Indicates if the product is active and available for purchase", example = "true")
     private boolean isActive = true;
 
+
+    @Column(nullable = false)
+    @NotNull
+    private Boolean deliveryAvailability = false;
+
+
     @Column
     @Schema(description = "Shipping cost for the product", example = "5.99")
     private double shippingCost;
@@ -127,5 +137,26 @@ public class Product {
     @ElementCollection
     @Schema(description = "Available images for the product")
     private List<String> images;
+
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = true)
+    private User user;
+
+    @Column(name = "is_deleted")
+    private boolean isDeleted = false;
+
+    // Auditing Fields
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    private String createdBy;
+
+    private String updatedBy;
 
 }

@@ -17,11 +17,14 @@ public class RatedProductController {
         this.ratedProductService = ratedProductService;
     }
 
-    // Rate a product
     @PostMapping("/rate")
-    public ResponseEntity<RatedProduct> rateProduct(@RequestParam String userId, @RequestParam String productId) {
-        return ResponseEntity.ok(ratedProductService.rateProduct(userId, productId));
+    public ResponseEntity<RatedProduct> rateProduct(
+            @RequestParam String userId,
+            @RequestParam String productId,
+            @RequestParam int rating) {
+        return ResponseEntity.ok(ratedProductService.rateProduct(userId, productId, rating));
     }
+
 
     // Get all rated products for a user
     @GetMapping("/{userId}")

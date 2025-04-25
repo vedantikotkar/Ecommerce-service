@@ -15,13 +15,8 @@ public class EmailController {
     private EmailService emailService;
 
     @PostMapping("/send-email")
-    public ResponseEntity<String> sendEmail(@RequestBody EmailRequest emailRequest) {
-        String to = emailRequest.getEmail();
-        String subject = "Hello " + emailRequest.getName();
-        String body = "Congratulations " + emailRequest.getName() + " (" + emailRequest.getPhone() + "):\n\n" + emailRequest.getMessage();
-
-        emailService.sendEmail(to, subject, body);
-
-        return ResponseEntity.ok("Email sent successfully!");
+    public ResponseEntity<String> sendEmail(@RequestBody EmailRequest request) {
+        emailService.saveAndNotify(request);
+        return ResponseEntity.ok("Message received and email sent successfully.");
     }
 }

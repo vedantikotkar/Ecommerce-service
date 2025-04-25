@@ -64,7 +64,7 @@ public class OrderController {
     }
 
     // DELETE an order
-    @DeleteMapping("/{id}")
+    @PostMapping("/{id}")
     public ResponseEntity<Object> deleteOrder(@PathVariable String id) {
         return orderRepository.findById(id)
                 .map(order -> {
@@ -84,4 +84,14 @@ public class OrderController {
             return ResponseEntity.badRequest().body("Failed to cancel the order. It may already be processed.");
         }
     }
+
+    @GetMapping("/cancelled")
+    public ResponseEntity<List<Order>> getCancelledOrders() {
+        List<Order> cancelledOrders = orderService.getCancelledOrders();
+        if (cancelledOrders.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(cancelledOrders);
+    }
+
 }

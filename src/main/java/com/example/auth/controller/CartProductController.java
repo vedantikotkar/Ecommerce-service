@@ -2,6 +2,7 @@ package com.example.auth.controller;
 
 import com.example.auth.entity.CartProduct;
 import com.example.auth.service.CartProductService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +18,15 @@ public class CartProductController {
         this.cartProductService = cartProductService;
     }
 
-    // Add product to cart
     @PostMapping("/add")
-    public ResponseEntity<CartProduct> addToCart(@RequestParam String userId, @RequestParam String productId) {
-        return ResponseEntity.ok(cartProductService.addToCart(userId, productId));
+    public ResponseEntity<?> addToCart(@RequestParam String userId, @RequestParam String productId) {
+        try {
+            return ResponseEntity.ok(cartProductService.addToCart(userId, productId));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
     }
+
 
     // Get all cart products for a user
     @GetMapping("/{userId}")
@@ -30,9 +35,9 @@ public class CartProductController {
     }
 
     // Remove product from cart
-    @DeleteMapping("/remove")
+    @PostMapping("/remove")
     public ResponseEntity<String> removeFromCart(@RequestParam String userId, @RequestParam String productId) {
-        cartProductService.removeFromCart(userId, productId);
+        cartProductService.deleteCartProduct(userId, productId);
         return ResponseEntity.ok("Product removed from cart successfully!");
     }
 

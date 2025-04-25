@@ -63,7 +63,10 @@ package com.example.auth.entity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -104,5 +107,20 @@ public class  Order {
 
     private String currency;
     private double amount;
+
+    @Column(name = "is_deleted")
+    private boolean isDeleted = false;
+
+    // Auditing Fields
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    private String createdBy;
+    private String updatedBy;
 
 }

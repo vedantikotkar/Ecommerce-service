@@ -1,6 +1,4 @@
 package com.example.auth.controller;
-
-
 import com.example.auth.service.StripePaymentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

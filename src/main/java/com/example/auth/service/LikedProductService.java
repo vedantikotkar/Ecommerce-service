@@ -3,6 +3,7 @@ package com.example.auth.service;
 import com.example.auth.entity.LikedProduct;
 import com.example.auth.repository.LikedProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,5 +33,11 @@ public class LikedProductService {
 
     public List<LikedProduct> getAllLikedProducts() {
         return likedProductRepository.findAll();
+    }
+
+
+    @Transactional
+    public void removeFromWishlistByProductId(String productId) {
+        likedProductRepository.softDeleteByProductId(productId);
     }
 }
