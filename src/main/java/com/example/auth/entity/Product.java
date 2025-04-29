@@ -144,7 +144,7 @@ public class Product {
     private User user;
 
     @Column(name = "is_deleted")
-    private boolean isDeleted = false;
+    private Boolean isDeleted; // Use wrapper class
 
     // Auditing Fields
     @CreationTimestamp

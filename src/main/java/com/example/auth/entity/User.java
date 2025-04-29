@@ -40,7 +40,8 @@ public class User {
 
     // Soft Delete Field
     @Column(name = "is_deleted")
-    private boolean isDeleted = false;
+    private Boolean isDeleted; // Use wrapper class
+
 
     // Auditing Fields
     @CreationTimestamp

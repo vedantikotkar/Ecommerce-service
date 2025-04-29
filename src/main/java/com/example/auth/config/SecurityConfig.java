@@ -33,7 +33,7 @@ public class SecurityConfig {
 
     private static final String[] PUBLIC_DELETE_PATHS = {
             "/products/delete/**", "/categories/delete/**", "/orders/{id}", "/cart-products/remove",
-            "/auth/**", "/wishlist/remove/product/{productId}", "/cart-products/add", "/like/unlike",
+            "/auth/**", "/wishlist/remove/product/{productId}", "/cart-products/add", "/like/unlike","products/all",
             "/rated-products/unrate","/like/remove/product/{productId}","/products/{productId}/decrease",
             "/products/{productId}/increase","/reviewed-products/review","/rated-products/rate","/cart-products/remove"
     };

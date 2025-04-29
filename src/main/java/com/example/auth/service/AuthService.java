@@ -51,7 +51,7 @@ public class AuthService {
     private final String clientId = "springboot-keycloak";
     private final String clientSecret = "LYfLDQ6iMgR7edqmKtEgy2KNRJ37ac9O";
     private final String adminUsername = "admin";
-    private final String adminPassword = "admin123";
+    private final String adminPassword = "admin";
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
 
     @Autowired

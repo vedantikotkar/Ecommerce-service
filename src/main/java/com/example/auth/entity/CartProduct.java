@@ -21,7 +21,7 @@ public class CartProduct {
     private String productId; // Stores the product ID
     private String userId;    // Stores the user ID who added the product to the cart
     @Column(name = "is_deleted")
-    private boolean isDeleted = false;
+    private Boolean isDeleted;
 
     // Auditing Fields
     @CreationTimestamp

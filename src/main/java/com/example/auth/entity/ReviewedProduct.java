@@ -22,7 +22,8 @@ public class ReviewedProduct {
     private String userId;
     private String review;
     @Column(name = "is_deleted")
-    private boolean isDeleted = false;
+    private Boolean isDeleted; // Use wrapper class
+
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
